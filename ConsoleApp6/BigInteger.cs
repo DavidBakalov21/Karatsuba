@@ -6,45 +6,76 @@ public class BigInteger
     public BigInteger(string value)
     {
         var newArray = new List<int>();
-        for (int i = 0; i <value.Length; i++)
+        for (int i = value.Length; i >0; i--)
         {
-           newArray.Add(int.Parse(value[i].ToString()));
+           newArray.Add(int.Parse(value[i-1].ToString()));
         }
         _numbers = newArray.ToArray();
-        foreach (var VARIABLE in _numbers)
-        {
-            Console.WriteLine(VARIABLE);
-        }
     }
     public override string ToString()
     {
         var res = "";
-  for (int i = 0; i < _numbers.Length; i++)
+        for (int i = 0; i <_numbers.Length; i++)
   {
+      
       res += _numbers[i].ToString();
   }
-  
 
- 
-  // convert array back to string and return it
-  
-  //In case of reverse
- /* for (int i = _numbers.Length; i >0; i--)
-  {
-      res += _numbers[i-1].ToString();
-  }*/
-  
-  //In case of reverse
-  return res;
+        if (res[0]=='0')
+        {
+            res = res.Substring(1, res.Length - 1);
+        }
+        return res;
     }
     
     
     public BigInteger Add(BigInteger another)
     {
-        var a = new BigInteger("12345");
+        var current = new int[_numbers.Length];
+        var addAr = new int[another.ToString().Length];
         
+        for (int i =0 ; i <current.Length; i++)
+        {
+            current[i]= _numbers[i];
+         //   Console.WriteLine(current[i]);
+        }
+        for (int i =0 ; i<addAr.Length; i++)
+        {
+            addAr[i]= int.Parse(another.ToString()[i].ToString());
+        //    Console.WriteLine(addAr[i]);
+        }
+        var c = 0;
+        var ResList =new int[Math.Max(current.Length, addAr.Length)+1];
+        for (int i = 0; i < Math.Max(current.Length, addAr.Length); i++)
+        {
+            if ((current[i ] + addAr[i ])>=10)
+            {
+                var split = (current[i ] + addAr[i ]+c).ToString();
+                
+                c = int.Parse(split[0].ToString());
+                ResList[i] = int.Parse(split[1].ToString());
+                
+            }
+            else
+            {
+                ResList[i] = current[i ] + addAr[i ]+c;
+                c = 0;
+            }
+        }
+
+        if (c>0)
+        {
+            ResList[Math.Max(current.Length, addAr.Length) ] = c;
+        }
+        var resText = "";
+        for (int i = 0; i <ResList.Length ; i++)
+        {
+            resText += ResList[i].ToString();
+        }
+
+        var result =new BigInteger(resText);
         // return new BigInteger, result of current + another
-        return a;
+        return result;
     }
     
     public BigInteger Sub(BigInteger another)
