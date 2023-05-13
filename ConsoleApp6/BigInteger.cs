@@ -27,8 +27,29 @@ public class BigInteger
         }
         return res;
     }
-    
-    
+    public int ArrayToInt(int[] digits)
+    {
+        string result = "";
+        for (int i = digits.Length ; i > 0; i--)
+        {
+            result += digits[i-1] ;
+        }
+
+        int final = int.Parse(result);
+        return final;
+    }
+
+    int Reverse(string digits)
+    {
+        string result = "";
+        for (int i = digits.Length ; i > 0; i--)
+        {
+            result += digits[i-1] ;
+        }
+        int final = int.Parse(result);
+        return final;
+        
+    }
     public BigInteger Add(BigInteger another)
     {
         var current = new int[_numbers.Length];
@@ -74,66 +95,98 @@ public class BigInteger
         }
 
         var result =new BigInteger(resText);
-        // return new BigInteger, result of current + another
         return result;
     }
     
     public BigInteger Sub(BigInteger another)
     {
-        // return new BigInteger, result of current - another
+        var current = new int[_numbers.Length];
+        var addAr = new int[another.ToString().Length];
         
-        var a = new BigInteger("12345");
-        return a;
+        for (int i =0 ; i <current.Length; i++)
+        {
+            current[i]= _numbers[i];
+            //   Console.WriteLine(current[i]);
+        }
+        for (int i =0 ; i<addAr.Length; i++)
+        {
+            addAr[i]= int.Parse(another.ToString()[i].ToString());
+            //    Console.WriteLine(addAr[i]);
+        }
+        var c = 0;
+        var ResList =new int[Math.Max(current.Length, addAr.Length)];
+        var resText = "";
+        if (Reverse(another.ToString())<ArrayToInt(_numbers))
+        {
+            for (int i = 0; i < Math.Max(current.Length, addAr.Length); i++)
+            {
+                var SubNum = 0;
+                if (i<addAr.Length)
+                {
+                    SubNum = addAr[i];
+                }
+                else
+                {
+                    SubNum = 0;
+                }
+                int diff = current[i] - c - SubNum;
+                if (diff < 0)
+                {
+                    c = 1;
+                    ResList[i] = diff + 10;
+                }
+                else
+                {
+                    c = 0;
+                    ResList[i] = diff;
+                }
+            }
+           
+            for (int i = 0; i <ResList.Length ; i++)
+            {
+                resText += ResList[i].ToString();
+            }
+
+             
+        }
+        else if (Reverse(another.ToString())==ArrayToInt(_numbers))
+        {
+            resText = "0";
+        }  else if (Reverse(another.ToString())>ArrayToInt(_numbers))
+        {
+            for (int i = 0; i < Math.Max(current.Length, addAr.Length); i++)
+            {
+                var SubNum = 0;
+                if (i<current.Length)
+                {
+                    SubNum = current[i];
+                }
+                else
+                {
+                    SubNum = 0;
+                }
+                int diff = addAr[i]  - c -SubNum;
+                if (diff < 0)
+                {
+                    c = 1;
+                    ResList[i] = diff + 10;
+                }
+                else
+                {
+                    c = 0;
+                    ResList[i] = diff;
+                }
+            }
+
+            resText += "-";
+            for (int i = 0; i <ResList.Length ; i++)
+            {
+                resText += ResList[i].ToString();
+            } 
+        }
+        
+        var result =new BigInteger(resText); 
+      
+        return result;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-public class BigInteger
-{
-private int[] _numbers;
-
-public BigInteger(string value)
-{
-  int[] numbers = new int[] { 1};
-  _numbers = numbers;
-  for (int i = 0; i <value.Length; i++)
-  {
-      _numbers = _numbers.Append(int.Parse(value[i].ToString())).ToArray();
-  }
-  int[] preFinal= new int[_numbers.Length - 1];
-  for (int i = 0; i < _numbers.Length; i++)
-  {
-      if (i!=0)
-      {
-          preFinal=preFinal.Append(_numbers[i]).ToArray();
-      }
-  }
-
-  _numbers = preFinal;
-  foreach (var VARIABLE in _numbers)
-  {
-      Console.WriteLine(VARIABLE);
-  }
-
-
-  // convert here string representation to inner int array
-  // for example, "123434" must be converted to _numbers = {1, 2, 3, 4, 3, 4}
-}
-}
-*/

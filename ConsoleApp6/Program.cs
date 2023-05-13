@@ -1,9 +1,9 @@
 ﻿
 using ConsoleApp6;
-var a=new BigInteger("6274532");
-var b=new BigInteger("5643977");
+var a=new BigInteger("45");
+var b=new BigInteger("44");
 
-Console.WriteLine(b.Add(a).ToString());
+Console.WriteLine(b.Sub(a).ToString());
 
 
 
