@@ -32,6 +32,7 @@ public class BigInteger
     public static BigInteger operator +(BigInteger a, BigInteger b) => a.Add(b);
     
     public static BigInteger operator -(BigInteger a, BigInteger b) => a.Sub(b);
+    public static BigInteger operator *(BigInteger a, BigInteger b) => a.KaratsubaTechic(b);
     public override string ToString()
     {
         var res = "";
@@ -42,12 +43,16 @@ public class BigInteger
         return res;
     }
     
-    
+    public int ToInt()
+    {
+        return int.Parse(this.ShowFinal());
+
+    }
     
     public string ShowFinal()
     {
         var res = "";
-        for (int i = 0; i <_numbers.Length; i++)
+        for (int i = _numbers.Length -1 ; i >=0; i--)
         {
       
             res += _numbers[i].ToString();
@@ -68,9 +73,34 @@ public class BigInteger
         }
         return res;
     }
-    
-    
-     public BigInteger Add(BigInteger another)
+
+    public string ShowFinalMultiply()
+    {
+        var res = "";
+        for (int i = _numbers.Length; i >= 0; i--)
+        {
+
+            res += _numbers[i-1].ToString();
+        }
+
+        if (res[0] == '0')
+        {
+            res = res.Substring(1, res.Length - 1);
+        }
+
+        if (_isNegative)
+        {
+            res = '-' + res;
+        }
+        if (res == "")
+        {
+            res = "0";
+        }
+        return res;
+    }
+
+
+    public BigInteger Add(BigInteger another)
     { 
         
         var current = _numbers;
@@ -117,7 +147,7 @@ public class BigInteger
             }
         }
         var c = 0;
-        var ResList =new int[Math.Max(current.Length, addAr.Length)+1];
+        var ResList =new int[Math.Max(current.Length, addAr.Length)];
         for (int i = 0; i < Math.Max(current.Length, addAr.Length); i++)
         {
             var res = current[i] + addAr[i] + c;
@@ -128,9 +158,9 @@ public class BigInteger
         
         if (c>0)
         {
-            ResList[Math.Max(current.Length, addAr.Length) ] = c;
+            resText = c.ToString();
         }
-        for (int i = 0; i <ResList.Length ; i++)
+        for (int i = ResList.Length-1; i >=0 ; i--)
         {
             resText += ResList[i].ToString();
         }
@@ -172,7 +202,7 @@ public class BigInteger
              return Add(another);
          }
          
-             if (int.Parse(checkerFirst)<int.Parse(another.checkerFirst))
+             if (long.Parse(checkerFirst)<long.Parse(another.checkerFirst))
          {
              first = addAr;
              second = current;
@@ -205,7 +235,7 @@ public class BigInteger
                  ResList[i] = diff;
              }
          }
-         for (int i = 0; i <ResList.Length ; i++)
+         for (int i = ResList.Length-1; i >=0 ; i--)
          {
              resText += ResList[i].ToString();
          }
@@ -215,20 +245,44 @@ public class BigInteger
          
          return result;
      }
+
+    public BigInteger Addzeros(int m) {
+    List<int> res = new List<int>();
+        for(int i = 0; i < m; i++)
+        {
+            res.Add(0);
+        }
+        foreach(int value in _numbers)
+        {
+            res.Add(value);
+        }
+        _numbers = res.ToArray();
+        return this;
+    }
+
      public BigInteger KaratsubaTechic(BigInteger another)
      {
-         var Ix = int.Parse(checkerFirst);
-         var Iy = int.Parse(another.checkerFirst);
-         // Base case: if either x or y is less than 10, just use regular multiplication
-         if (Ix < 10 || Iy < 10)
-         {
-             return new BigInteger((Ix * Iy).ToString());
-         }
+         var first = long.Parse(checkerFirst);
+         var second = long.Parse(another.checkerFirst);
+        if (first < 10 || second < 10)
+        {
+            return new BigInteger((this.ToInt() * another.ToInt()).ToString());
+        }
 
-         var stepin = Math.Max(checkerFirst.Length, another.checkerFirst.Length);
-         var basee = 10 ^ (stepin/2);
-         
-         var res = new BigInteger("1");
-         return res;
-     }
+        int n = Math.Max(first.ToString().Length, another.ToString().Length);
+        int m = (int)Math.Floor(n / 2.0);
+        int powerOfTen = (int)Math.Pow(10, m);
+        BigInteger x0 = new BigInteger((first % powerOfTen).ToString());
+        BigInteger x1 = new BigInteger((first / powerOfTen).ToString());
+        BigInteger y0 = new BigInteger((second % powerOfTen).ToString());
+        BigInteger y1 = new BigInteger((second / powerOfTen).ToString());
+        BigInteger z0 = x0 * y0;
+        BigInteger z2 = x1 * y1;
+        BigInteger z1 = (x0 + x1) * (y0 + y1) - z0 - z2;
+        BigInteger powerOfTenBig = new BigInteger(Math.Pow(10, m).ToString());
+        BigInteger powerOfdouble = new BigInteger(Math.Pow(10, 2 * m).ToString());
+        BigInteger result = z2.Addzeros(m*2) + z1.Addzeros(m) + z0;
+
+        return result;
+    }
 }

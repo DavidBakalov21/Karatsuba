@@ -20,7 +20,7 @@ if (sign=="-")
 }
 else if (sign=="*")
 {
-  
+    res = a * b; 
 }
 
 Console.WriteLine(res.ShowFinal());
