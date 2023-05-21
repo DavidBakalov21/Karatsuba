@@ -1,27 +1,22 @@
-﻿
-using ConsoleApp6;
-
+﻿using Karatsuba2;
 
 string sample = Console.ReadLine();
 var elements = sample.Split(" ");
 
 
 
-var a=new BigInteger(elements[0]);
-var b=new BigInteger(elements[2]);
-var sign=elements[1];
-var res = new BigInteger("1");
-if (sign=="-")
+var a = new BigInteger(elements[0]);
+var b = new BigInteger(elements[2]);
+var sign = elements[1];
+if (sign == "-")
 {
-     res = a - b;
-}else if (sign=="+")
-{
-     res = a + b; 
+    Console.WriteLine((a - b).ShowFinal());
 }
-else if (sign=="*")
+else if (sign == "+")
 {
-    res = a * b; 
+    Console.WriteLine((a + b).ShowFinal());
 }
-
-Console.WriteLine(res.ShowFinal());
-//Console.WriteLine(res.ToString());
+else if (sign == "*")
+{
+    Console.WriteLine((a * b).ShowFinalMultiply());
+}
